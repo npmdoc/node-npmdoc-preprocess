@@ -1,9 +1,14 @@
-# api documentation for  [preprocess (v3.1.0)](https://github.com/jsoverson/preprocess)  [![npm package](https://img.shields.io/npm/v/npmdoc-preprocess.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-preprocess) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-preprocess.svg)](https://travis-ci.org/npmdoc/node-npmdoc-preprocess)
+# npmdoc-preprocess
+
+#### api documentation for  [preprocess (v3.1.0)](https://github.com/jsoverson/preprocess)  [![npm package](https://img.shields.io/npm/v/npmdoc-preprocess.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-preprocess) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-preprocess.svg)](https://travis-ci.org/npmdoc/node-npmdoc-preprocess)
+
 #### Preprocess directives in HTML, JavaScript, etc directives based off variable context
 
-[![NPM](https://nodei.co/npm/preprocess.png?downloads=true)](https://www.npmjs.com/package/preprocess)
+[![NPM](https://nodei.co/npm/preprocess.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/preprocess)
 
-[![apidoc](https://npmdoc.github.io/node-npmdoc-preprocess/build/screenCapture.buildNpmdoc.browser._2Fhome_2Ftravis_2Fbuild_2Fnpmdoc_2Fnode-npmdoc-preprocess_2Ftmp_2Fbuild_2Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-preprocess/build/apidoc.html)
+- [https://npmdoc.github.io/node-npmdoc-preprocess/build/apidoc.html](https://npmdoc.github.io/node-npmdoc-preprocess/build/apidoc.html)
+
+[![apidoc](https://npmdoc.github.io/node-npmdoc-preprocess/build/screenCapture.buildCi.browser.%252Ftmp%252Fbuild%252Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-preprocess/build/apidoc.html)
 
 ![npmPackageListing](https://npmdoc.github.io/node-npmdoc-preprocess/build/screenCapture.npmPackageListing.svg)
 
@@ -18,7 +23,6 @@
 {
     "author": {
         "name": "Jarrod Overson",
-        "email": "jsoverson@gmail.com",
         "url": "http://jarrodoverson.com/"
     },
     "bugs": {
@@ -80,17 +84,14 @@
     "main": "lib/preprocess.js",
     "maintainers": [
         {
-            "name": "jsoverson",
-            "email": "jsoverson@gmail.com"
+            "name": "jsoverson"
         },
         {
-            "name": "bendingbender",
-            "email": "semtexx@web.de"
+            "name": "bendingbender"
         }
     ],
     "name": "preprocess",
     "optionalDependencies": {},
-    "readme": "ERROR: No README data found!",
     "repository": {
         "type": "git",
         "url": "git://github.com/jsoverson/preprocess.git"
@@ -101,180 +102,6 @@
     },
     "version": "3.1.0"
 }
-```
-
-
-
-# <a name="apidoc.tableOfContents"></a>[table of contents](#apidoc.tableOfContents)
-
-#### [module preprocess](#apidoc.module.preprocess)
-1.  [function <span class="apidocSignatureSpan"></span>preprocess (src, context, typeOrOptions)](#apidoc.element.preprocess.preprocess)
-1.  [function <span class="apidocSignatureSpan">preprocess.</span>preprocessFile (srcFile, destFile, context, callback, options)](#apidoc.element.preprocess.preprocessFile)
-1.  [function <span class="apidocSignatureSpan">preprocess.</span>preprocessFileSync (srcFile, destFile, context, options)](#apidoc.element.preprocess.preprocessFileSync)
-1.  object <span class="apidocSignatureSpan">preprocess.</span>gruntMochaTestPreprocess
-
-#### [module preprocess.gruntMochaTestPreprocess](#apidoc.module.preprocess.gruntMochaTestPreprocess)
-1.  boolean <span class="apidocSignatureSpan">preprocess.gruntMochaTestPreprocess.</span>defer
-1.  [function <span class="apidocSignatureSpan">preprocess.gruntMochaTestPreprocess.</span>fn (deferred)](#apidoc.element.preprocess.gruntMochaTestPreprocess.fn)
-1.  number <span class="apidocSignatureSpan">preprocess.gruntMochaTestPreprocess.</span>maxTime
-1.  string <span class="apidocSignatureSpan">preprocess.gruntMochaTestPreprocess.</span>name
-
-
-
-# <a name="apidoc.module.preprocess"></a>[module preprocess](#apidoc.module.preprocess)
-
-#### <a name="apidoc.element.preprocess.preprocess"></a>[function <span class="apidocSignatureSpan"></span>preprocess (src, context, typeOrOptions)](#apidoc.element.preprocess.preprocess)
-- description and source-code
-```javascript
-function preprocess(src, context, typeOrOptions) {
-  src = src.toString();
-  context = context || process.env;
-
-  // default values
-  var options = {
-    fileNotFoundSilentFail: false,
-    srcDir: process.cwd(),
-    srcEol: getEolType(src),
-    type: delim['html']
-  };
-
-  // needed for backward compatibility with 2.x.x series
-  if (typeof typeOrOptions === 'string') {
-    typeOrOptions = {
-      type: typeOrOptions
-    };
-  }
-
-  // needed for backward compatibility with 2.x.x series
-  if (typeof context.srcDir === "string") {
-    typeOrOptions = typeOrOptions || {};
-    typeOrOptions.srcDir = context.srcDir;
-  }
-
-  if (typeOrOptions && typeof typeOrOptions === 'object') {
-    options.srcDir = typeOrOptions.srcDir || options.srcDir;
-    options.fileNotFoundSilentFail = typeOrOptions.fileNotFoundSilentFail || options.fileNotFoundSilentFail;
-    options.srcEol = typeOrOptions.srcEol || options.srcEol;
-    options.type = delim[typeOrOptions.type] || options.type;
-  }
-
-  context = copy(context);
-
-  return preprocessor(src, context, options);
-}
-```
-- example usage
-```shell
-...
-## Usage Examples
-
-'''js
-var pp = require('preprocess');
-
-var text = 'Hi, I am <!-- @echo USERNAME -->';
-
-pp.preprocess(text);
-// -> Hi, I am jsoverson
-
-pp.preprocess(text, {USERNAME : "Bob"});
-// -> Hi, I am Bob
-
-// specify the format to use for the directives as the third parameter
-pp.preprocess(text, {USERNAME : "Bob"}, {type: 'html'});
-...
-```
-
-#### <a name="apidoc.element.preprocess.preprocessFile"></a>[function <span class="apidocSignatureSpan">preprocess.</span>preprocessFile (srcFile, destFile, context, callback, options)](#apidoc.element.preprocess.preprocessFile)
-- description and source-code
-```javascript
-function preprocessFile(srcFile, destFile, context, callback, options) {
-  options = getOptionsForFile(srcFile, options);
-  context.src = srcFile;
-
-  fs.readFile(srcFile, function (err, data) {
-    if (err) return callback(err, data);
-    var parsed = preprocess(data, context, options);
-    fs.writeFile(destFile, parsed, callback);
-  });
-}
-```
-- example usage
-```shell
-...
-// -> Hi, I am Bob
-
-// specify the format to use for the directives as the third parameter
-pp.preprocess(text, {USERNAME : "Bob"}, {type: 'html'});
-// -> Hi, I am Bob
-
-// Preprocess files asynchronously
-pp.preprocessFile(src, dest, context, callback, options);
-
-// Preprocess files synchronously
-pp.preprocessFileSync(src, dest, context, options);
-'''
-
-## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or
-...
-```
-
-#### <a name="apidoc.element.preprocess.preprocessFileSync"></a>[function <span class="apidocSignatureSpan">preprocess.</span>preprocessFileSync (srcFile, destFile, context, options)](#apidoc.element.preprocess.preprocessFileSync)
-- description and source-code
-```javascript
-function preprocessFileSync(srcFile, destFile, context, options) {
-  options = getOptionsForFile(srcFile, options);
-  context.src = srcFile;
-
-  var data = fs.readFileSync(srcFile);
-  var parsed = preprocess(data, context, options);
-  return fs.writeFileSync(destFile, parsed);
-}
-```
-- example usage
-```shell
-...
-pp.preprocess(text, {USERNAME : "Bob"}, {type: 'html'});
-// -> Hi, I am Bob
-
-// Preprocess files asynchronously
-pp.preprocessFile(src, dest, context, callback, options);
-
-// Preprocess files synchronously
-pp.preprocessFileSync(src, dest, context, options);
-'''
-
-## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or
-changed functionality. Lint and test your code using jshint
-
-## Release History
-...
-```
-
-
-
-# <a name="apidoc.module.preprocess.gruntMochaTestPreprocess"></a>[module preprocess.gruntMochaTestPreprocess](#apidoc.module.preprocess.gruntMochaTestPreprocess)
-
-#### <a name="apidoc.element.preprocess.gruntMochaTestPreprocess.fn"></a>[function <span class="apidocSignatureSpan">preprocess.gruntMochaTestPreprocess.</span>fn (deferred)](#apidoc.element.preprocess.gruntMochaTestPreprocess.fn)
-- description and source-code
-```javascript
-fn = function (deferred) {
-  var spawnGrunt = spawn(process.argv[0], [process.argv[1], 'mochaTest:preprocess']);
-
-  spawnGrunt.stderr.on('data', function(data) {
-    deferred.resolve();
-    throw new Error(data);
-  });
-
-  spawnGrunt.on('exit', function() {
-    deferred.resolve();
-  });
-}
-```
-- example usage
-```shell
-n/a
 ```
 
 
